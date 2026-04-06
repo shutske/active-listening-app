@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Listening Skills for Agricultural Communities</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.2/babel.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --e900:#2d1f0e; --e800:#4a3520; --e700:#6b4c2e; --e600:#8b6914; --e500:#a67c32;
+  --e400:#c49a4a; --e300:#d4b87a; --e200:#e8d5a8; --e100:#f5edd6; --e50:#faf7ef;
+  --g900:#1a3a1a; --g700:#2d6a2d; --g600:#3d8b3d; --g500:#4a9e4a; --g400:#6ab86a;
+  --g300:#8ed08e; --g200:#b8e4b8; --g100:#e0f2e0;
+  --b600:#4a7fb5; --b100:#e0eef8;
+  --red:#c45a3c; --orange:#d4863a;
+  --txt:#2d1f0e; --txt2:#5a4a35; --txtL:#8a7a65;
+  --bg:#faf7ef; --card:#ffffff;
+  --shSm:0 1px 3px rgba(45,31,14,0.1); --shMd:0 4px 12px rgba(45,31,14,0.12);
+  --r:10px; --t:0.3s ease;
+}
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--txt); line-height:1.65; }
+#root { min-height:100vh; }
+/* Animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.anim { animation: fadeUp 0.3s ease; }
+
+/* Header */
+.hdr { background:linear-gradient(135deg,var(--e800),var(--g900)); position:sticky; top:0; z-index:100; box-shadow:var(--shMd); }
+.hdr-top { max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 20px; }
+.hdr-brand { display:flex; align-items:center; gap:12px; color:#fff; }
+.hdr-icon { width:40px; height:40px; border-radius:50%; background:var(--e400); display:flex; align-items:center; justify-content:center; font-size:20px; }
+.hdr-title { font-size:1.1rem; font-weight:600; }
+.hdr-sub { font-size:0.75rem; opacity:0.75; }
+.hdr-badge { background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:5px 14px; font-size:0.78rem; color:rgba(255,255,255,0.9); display:flex; align-items:center; gap:6px; }
+.hdr-dot { width:8px; height:8px; border-radius:50%; background:var(--g400); }
+.nav { max-width:1000px; margin:0 auto; display:flex; gap:2px; padding:0 20px; overflow-x:auto; }
+.nav-btn { background:none; border:none; color:rgba(255,255,255,0.6); padding:10px 16px; font-size:0.82rem; cursor:pointer; border-bottom:3px solid transparent; transition:var(--t); white-space:nowrap; font-family:inherit; }
+.nav-btn:hover { color:#fff; background:rgba(255,255,255,0.06); }
+.nav-btn.act { color:#fff; border-bottom-color:var(--e400); font-weight:600; }
+
+/* Main */
+.main { max-width:920px; margin:0 auto; padding:28px 20px 60px; }
+
+/* Cards & common */
+.card { background:var(--card); border:1px solid var(--e200); border-radius:var(--r); overflow:hidden; transition:var(--t); }
+.card:hover { box-shadow:var(--shSm); }
+
+/* Citation block */
+.cite { display:flex; align-items:flex-start; gap:8px; margin:12px 0; padding:10px 14px; background:#fdf8ee; border:1px solid #e8d5a8; border-radius:8px; font-size:0.78rem; line-height:1.55; color:#78622a; }
+.cite-label { font-weight:700; color:var(--e500); flex-shrink:0; margin-top:1px; }
+.cite-text { font-style:italic; }
+
+/* Tip/Warning/Example boxes */
+.tip { margin:12px 0; padding:12px 16px; background:var(--g100); border-left:4px solid var(--g500); border-radius:0 6px 6px 0; font-size:0.85rem; color:var(--g900); line-height:1.6; }
+.warn { margin:12px 0; padding:12px 16px; background:#fef3e0; border-left:4px solid var(--orange); border-radius:0 6px 6px 0; font-size:0.85rem; color:#5a3e1a; line-height:1.6; }
+.examp { margin:12px 0; padding:12px 16px; background:var(--b100); border-left:4px solid var(--b600); border-radius:0 6px 6px 0; font-size:0.85rem; color:#1a3a5a; line-height:1.6; white-space:pre-line; }
+
+/* Tables */
+.vtable { width:100%; border-collapse:collapse; margin:12px 0; font-size:0.85rem; }
+.vtable th { background:var(--e100); padding:10px 14px; text-align:left; color:var(--e700); font-weight:600; }
+.vtable td { padding:10px 14px; border-top:1px solid var(--e200); color:var(--txt2); }
+.vtable .good { color:var(--g700); font-weight:500; }
+.vtable .bad { color:var(--red); font-weight:500; }
+
+/* Module */
+.mod-hdr { display:flex; align-items:center; gap:14px; padding:16px 20px; cursor:pointer; user-select:none; }
+.mod-hdr:hover { background:var(--e50); }
+.mod-num { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+.mod-body { padding:0 20px 24px 68px; }
+.mod-body h4 { font-size:0.92rem; color:var(--e700); margin:16px 0 6px; font-weight:600; }
+.mod-body p, .mod-body li { font-size:0.87rem; color:var(--txt2); margin-bottom:6px; line-height:1.6; }
+.mod-body ul, .mod-body ol { padding-left:20px; }
+.mod-body li { margin-bottom:5px; }
+
+/* Buttons */
+.btn-green { display:inline-flex; align-items:center; gap:6px; background:var(--g700); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; font-family:inherit; transition:var(--t); }
+.btn-green:hover { background:var(--g600); }
+.btn-green.done { background:var(--txtL); cursor:default; }
+.btn-outline { padding:8px 18px; border-radius:8px; border:1px solid var(--e300); background:var(--e100); cursor:pointer; font-size:0.82rem; color:var(--e700); transition:var(--t); font-family:inherit; }
+.btn-outline:hover { background:var(--e200); }
+
+/* Scenario */
+.sc-tab { padding:10px 18px; border-radius:8px; border:1px solid var(--e300); background:var(--card); cursor:pointer; font-size:0.82rem; color:var(--e700); transition:var(--t); font-family:inherit; }
+.sc-tab:hover { border-color:var(--e500); }
+.sc-tab.act { background:var(--e700); color:#fff; border-color:var(--e700); }
+
+.ans-btn { display:flex; align-items:flex-start; gap:10px; padding:12px 16px; border:2px solid var(--e200); border-radius:8px; background:var(--card); cursor:pointer; text-align:left; font-size:0.85rem; color:var(--txt2); transition:var(--t); font-family:inherit; line-height:1.55; width:100%; }
+.ans-btn:hover:not(.answered) { border-color:var(--e400); background:var(--e50); }
+.ans-letter { width:24px; height:24px; border-radius:50%; background:var(--e100); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; color:var(--e700); flex-shrink:0; margin-top:1px; }
+
+/* Flash cards */
+.fc-container { perspective:1000px; max-width:540px; margin:0 auto 20px; }
+.fc-card { width:100%; min-height:320px; position:relative; cursor:pointer; transform-style:preserve-3d; transition:transform 0.6s; }
+.fc-card.flipped { transform:rotateY(180deg); }
+.fc-face { position:absolute; top:0; left:0; width:100%; min-height:320px; backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 28px; text-align:center; }
+.fc-front { background:linear-gradient(145deg,var(--e100),var(--g100)); border:2px solid var(--e300); }
+.fc-back { background:linear-gradient(145deg,var(--g100),var(--b100)); border:2px solid var(--g400); transform:rotateY(180deg); }
+
+/* Assessment chips */
+.chip { padding:8px 14px; border-radius:20px; border:1px solid var(--e200); background:var(--e50); cursor:pointer; font-size:0.8rem; color:var(--txt2); transition:var(--t); user-select:none; font-family:inherit; }
+.chip:hover { border-color:var(--e400); }
+.chip.on { background:var(--orange); color:#fff; border-color:var(--orange); }
+
+/* Skill builder input */
+.sb-input { width:100%; padding:12px 16px; border:2px solid var(--e200); border-radius:8px; font-size:0.87rem; font-family:inherit; color:var(--txt); transition:var(--t); background:var(--card); }
+.sb-input:focus { outline:none; border-color:var(--e400); box-shadow:0 0 0 3px rgba(164,124,50,0.15); }
+
+/* Resources */
+.res-card { background:var(--card); border:1px solid var(--e200); border-radius:var(--r); padding:18px 22px; margin-bottom:10px; display:flex; align-items:flex-start; gap:14px; }
+.res-icon { width:42px; height:42px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
+
+/* Footer */
+.footer { text-align:center; padding:24px 20px; font-size:0.72rem; line-height:1.65; background:#f0ebe0; color:var(--txtL); border-top:1px solid var(--e200); }
+
+/* Hero */
+.hero { border-radius:16px; padding:44px 36px; text-align:center; margin-bottom:28px; background:linear-gradient(145deg,var(--e100),var(--g100)); border:1px solid var(--e200); }
+
+/* Feature grid */
+.feat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+.feat-card { background:var(--card); border-radius:var(--r); padding:22px 18px; border:1px solid var(--e200); text-align:center; cursor:pointer; transition:var(--t); }
+.feat-card:hover { transform:translateY(-2px); box-shadow:var(--shMd); border-color:var(--e400); }
+
+/* Responsive */
+@media(max-width:640px) {
+  .hdr-top { padding:10px 14px; }
+  .hdr-title { font-size:0.95rem; }
+  .nav { padding:0 10px; }
+  .nav-btn { padding:8px 10px; font-size:0.75rem; }
+  .main { padding:18px 14px 40px; }
+  .hero { padding:28px 18px; }
+  .mod-body { padding-left:18px; }
+  .fc-face { padding:22px 18px; min-height:280px; }
+  .fc-card { min-height:280px; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useCallback, useMemo } = React;
+
+// ═══════════════════════════════════════════════
+// DATA: LEARNING MODULES
+// ═══════════════════════════════════════════════
+const modules = [
+  {
+    id: 1, title: "Understanding Farm Stress",
+    desc: "Recognizing what stress looks like in agricultural communities",
+    content: [
+      { type:"heading", text:"Why Farm Stress Is Different" },
+      { type:"paragraph", text:"Farming and ranching involve unique pressures: unpredictable weather, volatile commodity prices, generational expectations, physical danger, and geographic isolation. When a farmer is in distress, they may not say \"I'm stressed.\" Instead, you'll see it in changes to behavior, appearance, and how they interact with others." },
+      { type:"citation", text:"Adapted from \"Talk to Farmers Under Stress,\" Michigan State University Extension (Wichtner-Zoia, Peterson, & Vandenberg, 2016)." },
+      { type:"heading", text:"What to Watch For" },
+      { type:"paragraph", text:"Stress shows up in several observable ways. Pay attention to changes across these areas:" },
+      { type:"list", items:[
+        "Emotional changes \u2014 Loss of enthusiasm, increased anxiety, depression, loss of sense of humor",
+        "Attitude shifts \u2014 Being critical or agitated over small things, poor concentration, indecision",
+        "Behavioral changes \u2014 Becoming quieter, sleep trouble, withdrawing from social activities, missing appointments",
+        "Farm changes \u2014 Reduced care of animals, neglected equipment or fields, self-neglect, increased accidents",
+        "Warning language \u2014 Negative self-talk like \"I'm a failure\" or \"My family would be better off without me\""
+      ]},
+      { type:"citation", text:"Source: Michigan State University Extension, \"Talk to Farmers Under Stress\"; also adapted from NDSU Extension Service FS-1805, \"Responding to Distressed People\" (April 2016)." },
+      { type:"tip", text:"Key insight: You don't need to be a counselor to notice these signs. As a lender, Extension educator, or neighbor, you're already in a position to see changes. Simply paying attention is the first step." },
+      { type:"heading", text:"Physical Symptoms of Stress" },
+      { type:"paragraph", text:"Stress isn't just mental. People under stress often experience racing heart, shortness of breath, stomach problems, headaches, fatigue, muscle tension, teeth grinding, and difficulty sleeping. Understanding this helps you recognize when someone may be struggling even if they don't say so directly." },
+      { type:"citation", text:"Source: MSU Extension, \"How Stress Affects You\" handout; based on the MSU Extension RELAX: Alternatives to Anger program. Director: Jeffrey W. Dwyer, MSU Extension." },
+      { type:"heading", text:"Stress Affects Thinking and Behavior Too" },
+      { type:"paragraph", text:"Beyond physical symptoms, stressed individuals may experience irritability, difficulty making decisions, restlessness, cynicism, trouble concentrating, and changes in appetite and sleep. Behavioral signs include withdrawing from people, increased substance use, stopping enjoyable activities, and increased conflict with others." },
+      { type:"citation", text:"Source: MSU Extension, \"How Stress Affects You\" interactive checklist (Farm Stress Handout series). Director: Jeffrey W. Dwyer, MSU Extension, East Lansing, MI." }
+    ]
+  },
+  {
+    id: 2, title: "Active Listening Fundamentals",
+    desc: "The core skills of truly hearing someone",
+    content: [
+      { type:"heading", text:"What Is Active Listening?" },
+      { type:"paragraph", text:"Active listening goes beyond just hearing words. It means using both your ears and your eyes to fully understand what someone is communicating. It involves being fully present, showing that you're engaged, and demonstrating that you understand not just the facts but the feelings behind them." },
+      { type:"citation", text:"Source: Holly Tiret, MSU Extension, \"Active Listening and Empathy for Human Connection\" (February 13, 2023). Director: Quentin Tyler, MSU Extension." },
+      { type:"heading", text:"Attending Behaviors \u2014 The Foundation" },
+      { type:"paragraph", text:"Before you say anything, your body language tells the other person whether you're really listening. The counseling literature refers to these as 'attending behaviors.'" },
+      { type:"list", items:[
+        "Face the person \u2014 Turn your body toward them, not just your head",
+        "Make comfortable eye contact \u2014 Not staring, but staying visually connected",
+        "Adopt an open posture \u2014 Uncrossed arms, leaning slightly forward",
+        "Nod occasionally \u2014 Shows you're following along",
+        "Stay relaxed \u2014 Don't fidget, check your phone, or look at the clock"
+      ]},
+      { type:"citation", text:"Source: \"Basic Counseling Skills I\" presentation (Attending Behaviors module). Physical attending: face person, head nod, open posture, lean in, eye contact, relaxed posture." },
+      { type:"example", text:"Think about it: Imagine you're telling someone about a serious problem, and they keep glancing at their phone. How does that feel? Now imagine they set everything aside, lean in, and give you their full attention. The difference is everything." },
+      { type:"heading", text:"Verbal Encouragers" },
+      { type:"paragraph", text:"Small verbal cues keep the conversation flowing and show engagement:" },
+      { type:"list", items:[
+        "\"Mm-hmm\" and \"I see\" \u2014 Simple acknowledgments",
+        "\"Go on...\" or \"Tell me more\" \u2014 Gentle invitations",
+        "Key word repetition \u2014 Repeating a word or two they used (e.g., they say \"I'm overwhelmed,\" you say \"Overwhelmed...\")"
+      ]},
+      { type:"citation", text:"Source: \"Basic Counseling Skills I\" presentation (Encouraging skills section); also referenced in \"Microskills Review\" training document." },
+      { type:"tip", text:"Remember: \"Listening is a skill requiring intention and practice.\" It doesn't come naturally to most of us, especially when we feel the urge to solve someone's problems. \u2014 Holly Tiret, MSU Extension" }
+    ]
+  },
+  {
+    id: 3, title: "Microskills: Questions, Paraphrasing & Reflection",
+    desc: "Specific techniques to deepen a conversation",
+    content: [
+      { type:"heading", text:"Open-Ended vs. Closed Questions" },
+      { type:"paragraph", text:"The type of question you ask dramatically shapes the conversation. Open-ended questions (beginning with What, How, or Tell me) invite the other person to share in depth. Closed questions (beginning with Is, Are, Can, Do) limit them to a yes or no." },
+      { type:"citation", text:"Source: \"Microskills Review\" training document; also \"Basic Counseling Skills I\" presentation (Questioning Skills section)." },
+      { type:"table", headers:["Closed (Limits Conversation)","Open (Invites Sharing)"], rows:[
+        ["\"Do you have any other options?\"","\"What other options might you have?\""],
+        ["\"Are you concerned about finances?\"","\"What concerns you most about your finances?\""],
+        ["\"Do you need help?\"","\"How do you hope I might be able to help?\""],
+        ["\"Did your loan officer give you advice?\"","\"What communication have you had with your loan officer?\""]
+      ]},
+      { type:"citation", text:"Source: \"Open-Ended Question Activity\" training document (FSU/Farm Stress Training materials). These specific conversion examples come directly from this training exercise." },
+      { type:"warning", text:"Avoid \"Why\" questions \u2014 They can feel accusatory and put people on the defensive. Instead of \"Why didn't you apply sooner?\", try \"What got in the way of applying?\" \u2014 Open-Ended Question Activity, Farm Stress Training" },
+      { type:"heading", text:"Tentative Questions" },
+      { type:"paragraph", text:"These are questions framed as gentle invitations: \"Tell me about...\" or \"Help me understand...\" They feel less like an interrogation and more like a conversation." },
+      { type:"citation", text:"Source: \"Microskills Review\" training document. Tentative questions are defined as \"Tell me...\" format questions that \"ask without asking\" and are described as less threatening." },
+      { type:"heading", text:"Paraphrasing" },
+      { type:"paragraph", text:"Paraphrasing means restating the essence of what someone said in your own words, then checking that you got it right. It has four key dimensions:" },
+      { type:"list", items:[
+        "Sentence stem \u2014 \"I hear you saying...\" or \"It sounds like...\"",
+        "Key words from what they shared",
+        "Essence of the message, shortened and clarified",
+        "Check-out \u2014 \"Is that right?\" or \"Am I understanding correctly?\""
+      ]},
+      { type:"citation", text:"Source: \"Basic Counseling Skills I\" presentation (Paraphrasing: Four Dimensions). Also referenced in \"Microskills Review\" which defines paraphrasing as restating the essence of what was said in shortened form." },
+      { type:"example", text:"Example: A farmer says, \"Between the flooding and the prices, I don't see how I'm going to make it this year. My wife's working two jobs and I feel like I'm letting everyone down.\"\n\nParaphrase: \"It sounds like the combination of the weather and market conditions is putting enormous financial pressure on you, and you're feeling the weight of that for your whole family. Is that right?\"" },
+      { type:"heading", text:"Reflection of Feeling" },
+      { type:"paragraph", text:"This goes beyond paraphrasing facts \u2014 it names the emotion you're hearing. The Basic Counseling Skills framework identifies five dimensions:" },
+      { type:"list", items:[
+        "\"It sounds like you're feeling...\" (sentence stem)",
+        "Name the emotion \u2014 overwhelmed, frustrated, scared (feeling label)",
+        "Brief context about why (paraphrase)",
+        "Use present tense",
+        "\"Is that close?\" (check-out)"
+      ]},
+      { type:"citation", text:"Source: \"Basic Counseling Skills I\" presentation (Reflection of Feeling: Five Dimensions). The presentation provides this specific framework and multiple practice exercises." },
+      { type:"example", text:"From the Basic Counseling Skills training:\n\nClient: \"So many things are going on. Another hectic semester, my dog's sick, mom's ill. I'm not sure I can take it anymore.\"\n\nCounselor reflection: \"You're feeling pretty overwhelmed by all the things going on right now.\"" },
+      { type:"citation", text:"Example drawn directly from \"Basic Counseling Skills I\" presentation, Reflection of Feeling exercise section." },
+      { type:"tip", text:"Why this matters: When people feel understood emotionally, not just factually, they open up. Reflection of feeling tells someone, \"I see you as a person, not just a problem to solve.\"" }
+    ]
+  },
+  {
+    id: 4, title: "Empathy vs. Sympathy",
+    desc: "Why feeling WITH someone matters more than feeling FOR them",
+    content: [
+      { type:"heading", text:"The Critical Difference" },
+      { type:"paragraph", text:"Sympathy says, \"I feel sorry for you.\" Empathy says, \"I'm here with you.\" This distinction matters enormously when you're talking with someone under stress." },
+      { type:"citation", text:"Source: Olivia Guy-Evans, MSc, \"The Difference Between Empathy and Sympathy,\" Simply Psychology (September 29, 2023). Reviewed by Saul Mcleod, PhD." },
+      { type:"table", headers:["Aspect","Sympathy (Less Helpful)","Empathy (More Helpful)"], rows:[
+        ["Connection","\"I'm sorry for you\" (creates distance)","\"I'm here with you\" (creates connection)"],
+        ["Focus","Your feelings about their situation","Their experience and feelings"],
+        ["Effect","Can feel like pity or dismissal","Feels like being understood"],
+        ["Example","\"I'm sorry, that's devastating\"","\"This is incredibly challenging. Tell me more about what you're dealing with\""]
+      ]},
+      { type:"citation", text:"Source: Adapted from the Sympathy vs. Empathy comparison in Guy-Evans (2023), Simply Psychology; and MSU Extension materials on empathy vs. sympathy in farm stress conversations." },
+      { type:"heading", text:"Three Types of Empathy" },
+      { type:"paragraph", text:"Research identifies three distinct types of empathy, each playing a different role:" },
+      { type:"list", items:[
+        "Cognitive empathy \u2014 Understanding their situation intellectually. You can imagine what they're going through.",
+        "Emotive empathy \u2014 Actually feeling something alongside them. You let their experience touch you emotionally.",
+        "Empathic action \u2014 This is the hardest part. Often, empathic action means sitting quietly and NOT trying to fix things. It means resisting the urge to offer advice or solutions."
+      ]},
+      { type:"citation", text:"Source: Guy-Evans (2023), \"The Difference Between Empathy and Sympathy,\" Simply Psychology. These three types of empathy are described as the thinking part, the feeling part, and the action part respectively." },
+      { type:"warning", text:"Common mistakes with empathic action: Jumping in with advice, offering solutions to \"fix\" the problem, providing diversions like \"look on the bright side,\" or comparing their situation to someone else's. \u2014 Guy-Evans, Simply Psychology (2023)" },
+      { type:"heading", text:"Empathy in Agricultural Conversations" },
+      { type:"example", text:"From MSU Extension guidance:\n\nSympathetic response (less helpful): \"I'm sorry, it's devastating.\"\n\nEmpathetic response (more helpful): \"This is incredibly challenging. Other farmers have faced similar situations and found a path through. Let's talk about what options might work for you.\"\n\nThe key difference: empathy provides specific, constructive engagement while sympathy can leave the person feeling pitied." },
+      { type:"citation", text:"Source: Michigan State University Extension, \"Talk to Farmers Under Stress\" \u2014 section on showing empathy rather than sympathy. Also reflected in the AFBF Training Facilitator Guide (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney)." },
+      { type:"heading", text:"Practical Questions That Show Empathy" },
+      { type:"list", items:[
+        "\"I hear you saying ____ (repeat their concerns)\"",
+        "\"This sounds like a lot to manage. How are you coping?\"",
+        "\"What can I do to support you?\"",
+        "\"These are tough challenges. How can I help?\"",
+        "\"Would it be helpful if we work together on an action plan?\"",
+        "\"Are there people who've been helpful when times were tough before?\""
+      ]},
+      { type:"citation", text:"Source: MSU Extension, \"How to Talk with Farmers Under Stress\" handout (Farm Stress Handout series). These specific questions are recommended for use by Extension educators, lenders, and agricultural support professionals." },
+      { type:"tip", text:"Tips for being an empathetic listener: Listen for feelings, not just facts. Wait patiently before responding. Ask what they need rather than assuming. Don't argue or dispute. Don't offer opinions unless asked. Don't fear silence \u2014 sitting with someone matters. \u2014 Adapted from Guy-Evans (2023), Simply Psychology" }
+    ]
+  },
+  {
+    id: 5, title: "Responding to People in Crisis",
+    desc: "When to listen, when to act, and how to assess danger",
+    content: [
+      { type:"heading", text:"Recognizing Serious Warning Signs" },
+      { type:"paragraph", text:"Some situations go beyond everyday stress. NDSU Extension's decision-making framework identifies specific signs of serious concern:" },
+      { type:"list", items:[
+        "Talking about or threatening suicide \u2014 statements like \"I want this all to end\"",
+        "Giving away possessions or putting affairs in order",
+        "Sudden mood improvement after deep depression (may indicate they've made a plan)",
+        "Significant confusion, isolation, or bizarre behavior",
+        "Making \"thank you\" or \"goodbye\" calls that feel final",
+        "Marked changes in behavior, mood, or hygiene",
+        "Expressing hopelessness or helplessness",
+        "Self-harm or dangerous behavior"
+      ]},
+      { type:"citation", text:"Source: NDSU Extension Service, FS-1805 \"Responding to Distressed People\" (April 2016), Fargo, ND. Adapted from \"Dealing with Distressed Students,\" NDSU Counseling Center and NDSU Behavioral Health Intervention Team." },
+      { type:"warning", text:"Important language note: Use \"died by suicide\" rather than \"committed suicide.\" The word \"committed\" is associated with crime and sin, adding stigma. Use \"died by suicide\" or \"completed suicide\" instead. \u2014 AFBF Training Facilitator Guide (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney)" },
+      { type:"heading", text:"A Framework for Responding" },
+      { type:"paragraph", text:"NDSU Extension's FS-1805 provides a three-level decision framework:" },
+      { type:"paragraph", text:"Step 1: Express your concern. Be direct about what you've observed: \"I've noticed you seem like you're carrying a lot right now\" or \"I heard you say something that concerned me.\"" },
+      { type:"paragraph", text:"Step 2: Assess the situation across three levels:" },
+      { type:"list", items:[
+        "IMMINENT DANGER \u2014 Person is unconscious, has ingested something, is threatening immediate harm, or is attempting physical harm. Call 911 immediately. Stay with the person unless it's unsafe to do so.",
+        "UNCLEAR BUT CONCERNING \u2014 Suicidal ideation without a clear plan, emotionally distraught, recent major stressor, history of concerning behavior, intoxicated. Stay with them, call 988 (Suicide & Crisis Lifeline), get permission to contact family, and contact your supervisor.",
+        "NOT IN IMMEDIATE DANGER \u2014 Isolated stress response, grief without failure to cope. Listen and provide support (not as a counselor), discuss resources, make plans to check in and follow up."
+      ]},
+      { type:"citation", text:"Source: NDSU Extension Service, FS-1805 \"Responding to Distressed People\" (April 2016). This three-level framework (Imminent Danger / Unclear-Concerning / No Danger) is the core decision structure from this publication." },
+      { type:"heading", text:"Asking Directly About Suicide" },
+      { type:"paragraph", text:"Research shows that asking someone directly about suicidal thoughts does NOT increase the risk \u2014 it can actually reduce distress by showing you care enough to ask the hard question. The AFBF Training Guide includes practice exercises where participants ask each other directly: \"Are you having thoughts of suicide, death, or dying?\"" },
+      { type:"citation", text:"Source: AFBF Training Facilitator Guide, Session 2: Talking About Suicide (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney). Also supported by MSU Extension guidance in \"Talk to Farmers Under Stress.\"" },
+      { type:"tip", text:"You are not expected to be a counselor. Your role is to listen, connect the person with professional help, and follow up. Knowing your limits is a strength, not a weakness." }
+    ]
+  },
+  {
+    id: 6, title: "De-Escalation & Taking Care of Yourself",
+    desc: "Managing conflict, strong emotions, and your own wellbeing",
+    content: [
+      { type:"heading", text:"When Someone Is Angry" },
+      { type:"paragraph", text:"Stressed people may become angry \u2014 sometimes directed at you, even though you're trying to help. MSU Extension identifies specific de-escalation steps for agricultural professionals:" },
+      { type:"list", items:[
+        "Use active listening first \u2014 Let them vent. Don't interrupt or get defensive.",
+        "Describe facts without blame \u2014 \"Here's what I can see on our end...\"",
+        "Explain the situation clearly \u2014 State what you can and cannot do",
+        "Ask for their perspective \u2014 \"How do you see this situation?\"",
+        "Clarify and paraphrase \u2014 Make sure you understand their concerns",
+        "Reframe toward shared goals \u2014 \"We both want to find the best path forward\"",
+        "Brainstorm solutions together \u2014 Even small next steps matter",
+        "ALWAYS follow up soon after the conversation"
+      ]},
+      { type:"citation", text:"Source: Michigan State University Extension, \"Talk to Farmers Under Stress\" \u2014 section on being prepared to deal with conflict. These de-escalation steps are specifically designed for agricultural support professionals." },
+      { type:"heading", text:"Building a Productive Mindset" },
+      { type:"paragraph", text:"MSU Extension's Productive Mindset materials describe three techniques for managing your own stress as a helper:" },
+      { type:"list", items:[
+        "Self-talk \u2014 Tell yourself: \"I can overcome this,\" \"I've been through tough times before,\" \"I can adapt.\" Choose 3 power words (e.g., calm, capable, controlled).",
+        "Breathing \u2014 Deep breathing calms the mind, helps focus, reduces pain, and improves sleep. Combine deep breathing with positive self-talk.",
+        "Acceptance \u2014 Accept what's beyond your control. Redirect energy toward solutions rather than frustration. Include \"accept\" in your self-talk."
+      ]},
+      { type:"citation", text:"Source: MSU Extension, \"Productive Mindset\" handout (Farm Stress Handout series). Director: Jeffrey W. Dwyer, MSU Extension. References: Luskin & Pelletier, \"Stress Free for Good\"; Jon Kabat-Zinn, \"Full Catastrophe Living.\"" },
+      { type:"example", text:"From the Productive Mindset materials: Your brain generates approximately 70,000 thoughts per day \u2014 that's 70,000 opportunities to choose constructive self-talk. Your brain is only 2% of your body weight but uses 20% of your energy. Physical activity lessens cortisol and protects against the negative effects of stress." },
+      { type:"citation", text:"Facts cited from MSU Extension \"Productive Mindset\" handout, referencing Cleveland Clinic research and Puterman et al. studies." },
+      { type:"tip", text:"Choose three power words that help you stay centered. Examples: calm, capable, steady or patient, present, strong. Use them as anchors before and after difficult interactions. \u2014 MSU Extension, \"Productive Mindset\" handout" }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════
+// DATA: SCENARIOS
+// ═══════════════════════════════════════════════
+const scenarios = [
+  {
+    title: "Jack \u2014 A Dairy Farmer Facing Financial Pressure",
+    sourceNote: "Scenario adapted from \"FSA Scenarios\" training document, developed for USDA Farm Service Agency employee training. Used in the AFBF Training program (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney).",
+    story: "Jack is 52 years old, a fourth-generation dairy farmer. Over the past several years, he expanded his operation significantly, taking on new debt to build a larger milking parlor. When milk prices dropped, the extra capacity became a burden rather than an asset.\n\nYou've worked with Jack for years. Lately, you've noticed changes: his cows look dirtier than usual, equipment is left out in the weather, and trash has accumulated around the farmstead. His wife has taken an off-farm job. When you visit, Jack seems distracted and avoids eye contact.\n\nThen severe flooding hits the region, killing 13 of Jack's cows. He comes to your office looking defeated. He says, \"I don't know what I'm going to do. I've put everything into this farm and it's all falling apart.\"",
+    questions: [
+      { text:"What is the BEST first response to Jack's statement?",
+        options:["\"Have you looked into disaster assistance programs? There are several that might help.\"","\"It sounds like you're carrying an enormous amount of weight right now \u2014 the financial pressure, the flood, all of it. Tell me more about what you're dealing with.\"","\"I'm so sorry, Jack. That's terrible. I really hope things turn around for you.\"","\"You need to talk to a financial counselor. I can get you a referral.\""],
+        correct:1,
+        feedback_correct:"Correct! This response uses reflection of feeling and an open-ended invitation. It shows Jack you understand the emotional weight, not just the facts, and invites him to share more.\n\nSource: This approach aligns with the paraphrasing and reflection of feeling skills taught in the \"Basic Counseling Skills I\" presentation and MSU Extension's guidance on showing empathy rather than sympathy.",
+        feedback_incorrect:"While well-intentioned, jumping to solutions or expressing only sympathy misses the moment. Jack needs to feel heard first.\n\nSource: MSU Extension's \"Talk to Farmers Under Stress\" emphasizes showing empathy (feeling WITH) rather than sympathy (feeling FOR) and always ending with constructive next steps \u2014 but only after the person feels heard."
+      },
+      { text:"You've noticed the deteriorating conditions on Jack's farm. Which active listening skill helps you bring this up sensitively?",
+        options:["Ask a closed question: \"Is everything okay on the farm?\"","Express your observation with care: \"I've noticed some changes around the farm, and I'm concerned about you. How are things going?\"","Avoid mentioning it \u2014 it's his personal business","Tell him directly that his farm looks neglected and he needs to get things together"],
+        correct:1,
+        feedback_correct:"Correct! Expressing concern through honest observation is a form of attending and empathic engagement.\n\nSource: NDSU Extension FS-1805 recommends expressing concerns using observation statements: \"I heard you say...\" \"I've noticed...\" \"I'm concerned...\" This is the first step in their response framework.",
+        feedback_incorrect:"Avoiding the topic or being blunt both miss the mark. A closed yes/no question is easy to deflect.\n\nSource: NDSU Extension FS-1805, \"Responding to Distressed People\" \u2014 Step 1 of the framework: Express concerns using specific observations paired with care."
+      },
+      { text:"Jack says, \"My family would be better off without me dragging them down.\" What should you do?",
+        options:["Reassure him: \"That's not true, Jack. Your family needs you.\"","Change the subject to something more positive to lift his spirits","Take it seriously, stay calm, and ask directly: \"Jack, are you having thoughts of ending your life?\"","Tell him you'll pray for him and his family"],
+        correct:2,
+        feedback_correct:"Correct! Statements like 'my family would be better off without me' are warning signs. Research shows asking directly about suicidal thoughts does NOT increase risk.\n\nSource: AFBF Training Facilitator Guide, Session 2: \"Talking About Suicide\" (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney). Also supported by MSU Extension guidance.",
+        feedback_incorrect:"Reassurance, deflection, or vague spiritual support all avoid the critical concern.\n\nSource: AFBF Training Facilitator Guide, Session 2, and NDSU Extension FS-1805 both identify statements about being a burden as warning signs requiring direct follow-up."
+      }
+    ]
+  },
+  {
+    title: "Mr. McDougal \u2014 Community Boundaries and Hidden Crisis",
+    sourceNote: "Scenario adapted from \"FSA Scenarios\" training document. This scenario addresses maintaining boundaries in small communities and recognizing hidden warning signs.",
+    story: "Mr. McDougal is 46 years old. Six months ago, he lost his arm in a machinery accident. Since then, his family has been struggling. His wife has taken on extra work. Their kids' grades have dropped. Neighbors have noticed he's withdrawn from community events he used to lead.\n\nDuring a routine visit, Mr. McDougal tells you quietly, \"My children would be better off without me. I'm just a burden to everyone now.\" He seems calmer than he has in months \u2014 almost peaceful.\n\nLater that day, his wife calls you. She says he's been unusually upbeat the last few days, making thank-you calls to old friends, and he gave his prized hunting rifle to his brother last weekend. She's worried but isn't sure why.",
+    questions: [
+      { text:"\"My children would be better off without me.\" This type of statement is BEST understood as:",
+        options:["A natural expression of frustration \u2014 most people say things like this when stressed","A potential indicator of suicidal ideation that should be taken seriously and explored directly","Something that should be kept confidential between you and Mr. McDougal","An exaggeration \u2014 he's just looking for sympathy"],
+        correct:1,
+        feedback_correct:"Correct! Statements about being a burden to family are recognized warning signs.\n\nSource: NDSU Extension FS-1805 lists these as serious warning signs. The AFBF Training Guide Session 2 specifically addresses recognizing these statements.",
+        feedback_incorrect:"Dismissing this could be dangerous.\n\nSource: NDSU Extension FS-1805 identifies these statements under \"Warning Signs of Serious Concern.\" The AFBF Training Facilitator Guide emphasizes never treating such statements as mere frustration."
+      },
+      { text:"Mrs. McDougal describes sudden upbeat mood, thank-you calls, and giving away a prized possession. These behaviors suggest:",
+        options:["He's turning a corner and starting to feel better","Warning signs of possible suicidal planning \u2014 sudden calm after distress, settling affairs, giving away valued items","Normal coping behaviors as he adjusts to his disability","He's being generous because he can't use the rifle anymore"],
+        correct:1,
+        feedback_correct:"Correct! This cluster of behaviors is a recognized pattern of possible suicidal planning.\n\nSource: The FSA Scenarios document specifically notes these as concerning indicators. NDSU Extension FS-1805 includes these in its \"Unclear/Concerning\" assessment category.",
+        feedback_incorrect:"While it might seem positive, this cluster of behaviors is a recognized warning pattern.\n\nSource: FSA Scenarios training document and NDSU Extension FS-1805 both identify these as warning signs of possible suicidal planning, not recovery."
+      },
+      { text:"What is the BEST course of action after Mrs. McDougal's phone call?",
+        options:["Tell her not to worry \u2014 it sounds like he's doing better","Take her concerns seriously, share what you've observed, and encourage her to contact 988 or emergency services","Visit Mr. McDougal yourself to check on him","Wait and see how things develop over the next few weeks"],
+        correct:1,
+        feedback_correct:"Correct! When multiple warning signs converge, the situation is urgent. Connect the family with crisis professionals.\n\nSource: NDSU Extension FS-1805 framework \u2014 when \"Unclear/Concerning,\" the recommended action is to call 988, stay with the person, and contact family.",
+        feedback_incorrect:"Waiting or minimizing delays critical action.\n\nSource: NDSU Extension FS-1805 \u2014 the \"Unclear/Concerning\" category requires immediate connection with crisis professionals."
+      }
+    ]
+  },
+  {
+    title: "Greg \u2014 Anger and Limited Resources",
+    sourceNote: "Scenario adapted from \"FSA Scenarios\" training document. Focuses on de-escalation techniques when a distressed person becomes angry and resources are limited.",
+    story: "Greg has been farming for 25 years. After severe flooding destroyed most of his crops, he applied for USDA disaster assistance. The process has been slow and the available assistance doesn't come close to covering his losses.\n\nGreg comes to your office for a follow-up. You notice: his clothes are rumpled, his hygiene has declined, and he's pacing in the waiting area. His hands are shaking.\n\nWhen you explain that no additional programs are available, Greg's face reddens. He slams his hand on the desk and says, \"This is garbage! I've paid taxes my whole life and now when I need help, you people have nothing for me? What am I supposed to do \u2014 just lose everything?\"",
+    questions: [
+      { text:"Greg is angry and has slammed his hand on the desk. What is the BEST immediate response?",
+        options:["Tell him firmly that this behavior isn't acceptable in the office","Stay calm, give him space, and acknowledge his feelings: \"I can hear how frustrated and overwhelmed you are. This is an incredibly difficult situation.\"","Apologize repeatedly and promise you'll try to find something","Leave the room until he calms down"],
+        correct:1,
+        feedback_correct:"Correct! De-escalation starts with staying calm and acknowledging feelings. Greg isn't really angry at you \u2014 he's overwhelmed.\n\nSource: MSU Extension, \"Talk to Farmers Under Stress\" \u2014 de-escalation section. The AFBF Training Guide Session 3 covers facilitated conversations with de-escalation practice.",
+        feedback_incorrect:"Setting rigid boundaries, over-apologizing, or leaving all miss the moment.\n\nSource: MSU Extension's de-escalation framework emphasizes: use active listening first, describe facts without blame, ask for the other person's perspective."
+      },
+      { text:"Before the outburst, you noticed rumpled clothes, declined hygiene, pacing, shaking hands. These observations are MOST useful as:",
+        options:["Evidence of stress indicators that help you approach with extra care and empathy","Reasons to keep the meeting short and businesslike","Signs Greg might become violent \u2014 have security present","Things to note in his file for compliance purposes"],
+        correct:0,
+        feedback_correct:"Correct! Attending means using your eyes as well as your ears.\n\nSource: \"Basic Counseling Skills I\" presentation \u2014 Attending Behaviors. NDSU Extension FS-1805 lists these among its 12 signs of distress.",
+        feedback_incorrect:"Physical signs of distress inform your approach, not reasons to withdraw or document.\n\nSource: \"Basic Counseling Skills I\" teaches attending behaviors as a way to convey empathy. NDSU Extension FS-1805 frames these as cues for compassionate engagement."
+      },
+      { text:"After acknowledging Greg's feelings, what is the BEST next step?",
+        options:["Explain again why no additional programs are available","Ask an open-ended question: \"I want to understand what you're facing. Can you walk me through your biggest concerns right now?\"","Suggest he take time to cool off and come back another day","Hand him a printed list of resources and tell him to call if he needs anything"],
+        correct:1,
+        feedback_correct:"Correct! After acknowledging feelings, an open-ended question deepens the conversation.\n\nSource: MSU Extension's de-escalation steps: listen \u2192 acknowledge \u2192 ask for views \u2192 clarify \u2192 brainstorm solutions. The \"Microskills Review\" emphasizes open-ended questions to understand the full picture.",
+        feedback_incorrect:"Repeating bad news, dismissing, or handing off a generic list all miss the opportunity.\n\nSource: MSU Extension's de-escalation framework moves from listening \u2192 acknowledging \u2192 asking perspective \u2192 clarifying \u2192 brainstorming together."
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════
+// DATA: FLASH CARDS
+// ═══════════════════════════════════════════════
+const flashcardsData = [
+  { front:"Active Listening", back:"Using both your ears and your eyes to fully understand what someone is communicating \u2014 being present, engaged, and showing you understand not just the facts but the feelings.", source:"Holly Tiret, MSU Extension (2023)", deck:"skills" },
+  { front:"Open-Ended Question", back:"A question beginning with What, How, or Tell me that invites sharing in depth. Example: \"What concerns you most right now?\"", source:"Microskills Review; Basic Counseling Skills I", deck:"skills" },
+  { front:"Closed-Ended Question", back:"A question answerable with yes/no. Useful for specific facts but limits conversation. Example: \"Did you apply for assistance?\"", source:"Microskills Review; Basic Counseling Skills I", deck:"skills" },
+  { front:"Paraphrasing", back:"Restating the essence of what someone said in your own words, then checking: \"It sounds like you're saying [X]. Is that right?\" Four dimensions: stem, key words, essence, check-out.", source:"Basic Counseling Skills I (Four Dimensions)", deck:"skills" },
+  { front:"Reflection of Feeling", back:"Naming the emotion beneath someone's words: \"It sounds like you're feeling overwhelmed.\" Five dimensions: stem, feeling label, context, present tense, check-out.", source:"Basic Counseling Skills I (Five Dimensions)", deck:"skills" },
+  { front:"Encouragers", back:"Small verbal and nonverbal cues: nodding, \"mm-hmm,\" \"go on,\" or repeating a key word. Shows engagement without interrupting.", source:"Microskills Review; Basic Counseling Skills I", deck:"skills" },
+  { front:"Summarization", back:"Combining multiple paraphrases to tie themes together over a longer conversation. Use at beginning, middle, and end. Helps identify patterns.", source:"Basic Counseling Skills I; Microskills Review", deck:"skills" },
+  { front:"Attending Behaviors", back:"Physical signals of engagement: facing the person, comfortable eye contact, open posture, leaning in, staying relaxed, no distractions.", source:"Basic Counseling Skills I (Attending module)", deck:"skills" },
+  { front:"Tentative Questions", back:"Gentle invitations: \"Tell me about...\" or \"Help me understand...\" Less threatening \u2014 they 'ask without asking.'", source:"Microskills Review training document", deck:"skills" },
+  { front:"Focusing", back:"Helping someone determine which issue to address first. \"Of all the things you're dealing with, what feels most pressing right now?\"", source:"Microskills Review training document", deck:"skills" },
+  { front:"Empathy vs. Sympathy", back:"Sympathy is feeling FOR someone (distance). Empathy is feeling WITH someone (connection). \"I'm here with you\" not \"I'm sorry for you.\"", source:"Guy-Evans, Simply Psychology (2023); MSU Extension", deck:"empathy" },
+  { front:"Cognitive Empathy", back:"Understanding someone's situation intellectually \u2014 imagining what they're going through. The 'thinking' part of empathy.", source:"Guy-Evans, Simply Psychology (2023)", deck:"empathy" },
+  { front:"Emotive Empathy", back:"Actually feeling something alongside another person. The 'feeling' part of empathy.", source:"Guy-Evans, Simply Psychology (2023)", deck:"empathy" },
+  { front:"Empathic Action", back:"Often means sitting quietly and NOT trying to fix things. Resisting the urge to offer advice. Simply being present.", source:"Guy-Evans, Simply Psychology (2023)", deck:"empathy" },
+  { front:"Why avoid \"Why\" questions?", back:"\"Why\" questions feel accusatory. Instead of \"Why didn't you...?\", try \"What got in the way of...?\"", source:"Open-Ended Question Activity (Farm Stress Training)", deck:"tips" },
+  { front:"The Check-Out", back:"Always verify: \"Is that right?\" \"Am I hearing you correctly?\" Prevents assumptions and shows respect.", source:"Basic Counseling Skills I", deck:"tips" },
+  { front:"Warning Signs of Farm Stress", back:"Emotional changes, attitude shifts, behavioral withdrawal, farm deterioration, self-neglect, negative self-talk, substance use.", source:"MSU Extension, \"Talk to Farmers Under Stress\"", deck:"crisis" },
+  { front:"Suicide Warning Signs", back:"Talking about being a burden, giving away possessions, sudden calm after depression, farewell calls, hopelessness.", source:"NDSU Extension FS-1805; AFBF Training Guide", deck:"crisis" },
+  { front:"Asking About Suicide", back:"Ask directly: \"Are you having thoughts of ending your life?\" Research shows this does NOT increase risk.", source:"AFBF Training Guide Session 2; MSU Extension", deck:"crisis" },
+  { front:"Three Levels of Danger", back:"Imminent (call 911), Unclear/Concerning (call 988, stay with person), Not in danger (listen, resources, follow up).", source:"NDSU Extension FS-1805", deck:"crisis" },
+  { front:"De-Escalation Steps", back:"Stay calm \u2192 Let them vent \u2192 Describe facts without blame \u2192 Acknowledge feelings \u2192 Ask their view \u2192 Reframe \u2192 Follow up.", source:"MSU Extension, \"Talk to Farmers Under Stress\"", deck:"crisis" },
+  { front:"Self-Care for Helpers", back:"Self-talk (\"I can handle this\"), deep breathing, acceptance. Choose 3 power words. Debrief with colleagues.", source:"MSU Extension, \"Productive Mindset\" handout", deck:"tips" },
+  { front:"\"Died by Suicide\" Language", back:"Use \"died by suicide\" not \"committed suicide.\" \"Committed\" associates suicide with crime and adds stigma.", source:"AFBF Training Facilitator Guide (Bjornestad et al.)", deck:"crisis" },
+  { front:"Reframing", back:"Shift from opposition to shared goals. \"We both want to find the best path forward for you.\"", source:"MSU Extension de-escalation framework", deck:"tips" }
+];
+
+const deckLabels = { all:"All Cards", skills:"Core Skills", empathy:"Empathy", crisis:"Crisis Response", tips:"Practical Tips" };
+
+// ═══════════════════════════════════════════════
+// DATA: SKILL BUILDER
+// ═══════════════════════════════════════════════
+const skillExercises = [
+  { closed:"Do you have any other options?", open:"What other options might you have?" },
+  { closed:"Are you concerned about your finances?", open:"What concerns you most about your finances?" },
+  { closed:"Did your loan officer give you advice?", open:"What communication have you had with your loan officer?" },
+  { closed:"Do you need help?", open:"How do you hope I might be able to help you?" },
+  { closed:"Is your family supportive?", open:"How has your family been responding to what you're going through?" },
+  { closed:"Are you sleeping okay?", open:"How has your sleep been lately?" },
+  { closed:"Did the flooding damage your crops?", open:"Tell me about how the flooding affected your operation." },
+  { closed:"Do you have insurance?", open:"What kind of safety nets do you have in place for situations like this?" },
+  { closed:"Are you feeling overwhelmed?", open:"How are you managing everything that's going on right now?" },
+  { closed:"Did you talk to anyone about this?", open:"Who have you been able to talk to about what you're going through?" },
+  { closed:"Can you make your next payment?", open:"Walk me through what your cash flow looks like for the coming months." },
+  { closed:"Is this your first time dealing with a disaster?", open:"What experience have you had dealing with situations like this in the past?" }
+];
+
+// ═══════════════════════════════════════════════
+// DATA: SELF-ASSESSMENT
+// ═══════════════════════════════════════════════
+const assessCategories = [
+  { name:"Emotional & Attitude Signs", source:"MSU Extension, \"Talk to Farmers Under Stress\"; NDSU Extension FS-1805", items:["Loss of enthusiasm","Increased anxiety","Depression or prolonged sadness","Loss of sense of humor","Being critical over small things","Poor concentration","Indecision","Agitation or restlessness"] },
+  { name:"Behavioral Changes", source:"MSU Extension; NDSU Extension FS-1805", items:["Becoming quieter than usual","Sleep problems","Withdrawing from social activities","Missing appointments","Increased substance use","Overeating or loss of appetite","Stopping enjoyable activities","Increased arguments or conflict"] },
+  { name:"Farm & Physical Signs", source:"MSU Extension; MSU Extension \"How Stress Affects You\" handout", items:["Neglected animals or livestock","Equipment left in disrepair","Fields or property deteriorating","Self-neglect (hygiene, appearance)","Increased accidents","Physical symptoms (shaking, pacing)","Exhaustion or fatigue","Weight changes"] },
+  { name:"Serious Warning Signs", source:"NDSU Extension FS-1805; AFBF Training Facilitator Guide (Bjornestad, Cuthbertson, Karbowski, Schallhorn, Shutske & Karney)", items:["Statements about being a burden","Talking about wanting to end things","Giving away possessions","Sudden calm after prolonged distress","Making farewell-style calls","Expressing hopelessness","Isolation from all contact","Self-harm or dangerous behavior"] }
+];
+
+// ═══════════════════════════════════════════════
+// SMALL COMPONENTS
+// ═══════════════════════════════════════════════
+function Citation({text}) {
+  return React.createElement("div", {className:"cite"},
+    React.createElement("span", {className:"cite-label"}, "Source:"),
+    React.createElement("span", {className:"cite-text"}, text)
+  );
+}
+
+function ContentBlock({block}) {
+  const h = React.createElement;
+  switch(block.type) {
+    case "heading": return h("h4", null, block.text);
+    case "paragraph": return h("p", null, block.text);
+    case "citation": return h(Citation, {text:block.text});
+    case "tip": return h("div", {className:"tip"}, block.text);
+    case "warning": return h("div", {className:"warn"}, block.text);
+    case "example": return h("div", {className:"examp"}, block.text);
+    case "list": return h("ul", null, block.items.map((item,i) => h("li", {key:i}, item)));
+    case "table": return h("div", {style:{overflowX:"auto",margin:"12px 0"}},
+      h("table", {className:"vtable"},
+        h("thead", null, h("tr", null, block.headers.map((hd,i) => h("th", {key:i}, hd)))),
+        h("tbody", null, block.rows.map((row,ri) => h("tr", {key:ri}, row.map((cell,ci) => {
+          let cls = ci === 0 ? "bad" : ci === row.length-1 ? "good" : "";
+          return h("td", {key:ci, className:cls}, cell);
+        }))))
+      )
+    );
+    default: return null;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MODULE CARD
+// ═══════════════════════════════════════════════
+function ModuleCard({mod, isCompleted, onComplete}) {
+  const [open, setOpen] = useState(false);
+  const h = React.createElement;
+  return h("div", {className:"card", style:{marginBottom:12}},
+    h("div", {className:"mod-hdr", onClick:()=>setOpen(o=>!o)},
+      h("div", {className:"mod-num", style:{background:isCompleted?"#b8e4b8":"#e8d5a8", color:isCompleted?"#2d6a2d":"#6b4c2e"}}, isCompleted?"\u2713":mod.id),
+      h("div", {style:{flex:1}},
+        h("div", {style:{fontWeight:600, fontSize:"0.95rem", color:"#2d1f0e"}}, mod.title),
+        h("div", {style:{fontSize:"0.8rem", color:"#8a7a65"}}, mod.desc)
+      ),
+      h("span", {style:{fontSize:"1.1rem", color:"#8a7a65", transition:"transform 0.3s", transform:open?"rotate(90deg)":"rotate(0)", display:"inline-block"}}, "\u25B6")
+    ),
+    open && h("div", {className:"mod-body anim"},
+      mod.content.map((block,i) => h(ContentBlock, {key:i, block:block})),
+      h("button", {className:isCompleted?"btn-green done":"btn-green", onClick:(e)=>{e.stopPropagation(); if(!isCompleted) onComplete(mod.id);}}, isCompleted?"Completed \u2713":"Mark as Complete \u2713")
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// SCENARIO PAGE
+// ═══════════════════════════════════════════════
+function ScenarioPage() {
+  const [active, setActive] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const h = React.createElement;
+  const s = scenarios[active];
+  const letters = ["A","B","C","D"];
+
+  const handleAnswer = (qi,oi) => {
+    const key = active+"-"+qi;
+    if(answers[key]!==undefined) return;
+    setAnswers(prev => ({...prev, [key]:oi}));
+  };
+
+  const answeredAll = s.questions.every((_,qi)=>answers[active+"-"+qi]!==undefined);
+  const correctCount = answeredAll ? s.questions.filter((q,qi)=>answers[active+"-"+qi]===q.correct).length : 0;
+
+  return h("div", null,
+    h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Scenario Practice"),
+    h("p", {style:{fontSize:"0.87rem",color:"#8a7a65",marginBottom:18}}, "Read each scenario carefully, then answer the questions. Think about what active listening skills apply."),
+    h("div", {style:{display:"flex",gap:8,marginBottom:18,flexWrap:"wrap"}},
+      scenarios.map((sc,i) => h("button", {key:i, className:i===active?"sc-tab act":"sc-tab", onClick:()=>setActive(i)}, "Scenario "+(i+1)))
+    ),
+    h("div", {className:"card", style:{padding:24}},
+      h("div", {style:{background:"#faf7ef",border:"1px solid #e8d5a8",borderRadius:8,padding:20,marginBottom:16,fontSize:"0.87rem",lineHeight:1.7,color:"#5a4a35",whiteSpace:"pre-line"}},
+        h("div", {style:{fontWeight:700,fontSize:"1rem",marginBottom:10,color:"#2d1f0e"}}, s.title),
+        s.story
+      ),
+      h(Citation, {text:s.sourceNote}),
+      s.questions.map((q,qi) => {
+        const key = active+"-"+qi;
+        const answered = answers[key]!==undefined;
+        const userAnswer = answers[key];
+        const isCorrect = answered && userAnswer===q.correct;
+        return h("div", {key:qi, style:{marginBottom:24,paddingBottom:24,borderBottom:qi<s.questions.length-1?"1px solid #f5edd6":"none"}},
+          h("div", {style:{fontWeight:600,fontSize:"0.9rem",color:"#2d1f0e",marginBottom:10}}, (qi+1)+". "+q.text),
+          h("div", {style:{display:"flex",flexDirection:"column",gap:8}},
+            q.options.map((opt,oi) => {
+              const isSel = userAnswer===oi;
+              const isCorr = oi===q.correct;
+              let bc="#e8d5a8", bg="white", lBg="#f5edd6", lC="#6b4c2e";
+              if(answered) {
+                if(isSel&&isCorr){bc="#4a9e4a";bg="#e0f2e0";lBg="#4a9e4a";lC="white";}
+                else if(isSel&&!isCorr){bc="#c45a3c";bg="#fef0ee";lBg="#c45a3c";lC="white";}
+                else if(isCorr){bc="#4a9e4a";bg="#e0f2e0";}
+              }
+              return h("button", {key:oi, className:"ans-btn"+(answered?" answered":""), style:{borderColor:bc,background:bg,cursor:answered?"default":"pointer"}, onClick:()=>handleAnswer(qi,oi), disabled:answered},
+                h("span", {className:"ans-letter", style:{background:lBg,color:lC}}, letters[oi]),
+                h("span", null, opt)
+              );
+            })
+          ),
+          answered && h("div", {style:{marginTop:12,padding:"12px 16px",borderRadius:8,fontSize:"0.85rem",lineHeight:1.6,whiteSpace:"pre-line",background:isCorrect?"#e0f2e0":"#fef0ee",border:"1px solid "+(isCorrect?"#8ed08e":"#e8b8b0"),color:isCorrect?"#1a3a1a":"#5a1a1a"}}, isCorrect?q.feedback_correct:q.feedback_incorrect)
+        );
+      }),
+      answeredAll && h("div", {style:{textAlign:"center",padding:16,borderRadius:8,background:"#f5edd6",color:"#6b4c2e",fontWeight:600,marginTop:16}}, correctCount+" out of "+s.questions.length+" correct")
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// FLASH CARDS PAGE
+// ═══════════════════════════════════════════════
+function FlashCardsPage() {
+  const [deck, setDeck] = useState("all");
+  const [index, setIndex] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [shuffledCards, setShuffledCards] = useState(null);
+  const h = React.createElement;
+
+  const filtered = useMemo(() => {
+    if(shuffledCards && shuffledCards.deck===deck) return shuffledCards.cards;
+    return deck==="all" ? [...flashcardsData] : flashcardsData.filter(c=>c.deck===deck);
+  }, [deck, shuffledCards]);
+
+  const card = filtered[index] || filtered[0];
+
+  const changeDeck = (d) => { setDeck(d); setIndex(0); setFlipped(false); setShuffledCards(null); };
+  const shuffle = () => {
+    const arr=[...filtered];
+    for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+    setShuffledCards({deck,cards:arr}); setIndex(0); setFlipped(false);
+  };
+
+  return h("div", null,
+    h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Flash Cards"),
+    h("p", {style:{fontSize:"0.87rem",color:"#8a7a65",marginBottom:18}}, "Click a card to flip it. Use arrows to navigate. Each card includes its source."),
+    h("div", {style:{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center",marginBottom:18}},
+      Object.entries(deckLabels).map(([k,label]) => h("button", {key:k, style:{padding:"8px 16px",borderRadius:20,border:"1px solid "+(deck===k?"#8b6914":"#d4b87a"),background:deck===k?"#8b6914":"white",color:deck===k?"white":"#6b4c2e",fontSize:"0.8rem",fontWeight:500,cursor:"pointer",fontFamily:"inherit",transition:"0.3s"}, onClick:()=>changeDeck(k)}, label))
+    ),
+    h("div", {style:{display:"flex",alignItems:"center",justifyContent:"center",gap:16,marginBottom:18}},
+      h("button", {style:{width:40,height:40,borderRadius:"50%",border:"1px solid #d4b87a",background:"white",cursor:"pointer",fontSize:"1.1rem",color:"#6b4c2e",display:"flex",alignItems:"center",justifyContent:"center"}, onClick:()=>{setIndex(i=>(i-1+filtered.length)%filtered.length);setFlipped(false);}}, "\u25C0"),
+      h("span", {style:{fontSize:"0.87rem",minWidth:80,textAlign:"center",color:"#8a7a65"}}, (index+1)+" / "+filtered.length),
+      h("button", {style:{width:40,height:40,borderRadius:"50%",border:"1px solid #d4b87a",background:"white",cursor:"pointer",fontSize:"1.1rem",color:"#6b4c2e",display:"flex",alignItems:"center",justifyContent:"center"}, onClick:()=>{setIndex(i=>(i+1)%filtered.length);setFlipped(false);}}, "\u25B6")
+    ),
+    h("div", {className:"fc-container", onClick:()=>setFlipped(f=>!f)},
+      h("div", {className:"fc-card"+(flipped?" flipped":"")},
+        h("div", {className:"fc-face fc-front"},
+          h("div", {style:{fontSize:"0.7rem",textTransform:"uppercase",letterSpacing:"0.08em",color:"#8a7a65",marginBottom:14}}, "TERM"),
+          h("div", {style:{fontSize:"1.15rem",fontWeight:600,color:"#2d1f0e"}}, card&&card.front),
+          h("div", {style:{fontSize:"0.75rem",color:"#8a7a65",marginTop:20}}, "Click to reveal answer")
+        ),
+        h("div", {className:"fc-face fc-back"},
+          h("div", {style:{fontSize:"0.7rem",textTransform:"uppercase",letterSpacing:"0.08em",color:"#8a7a65",marginBottom:14}}, "DEFINITION"),
+          h("div", {style:{fontSize:"0.95rem",lineHeight:1.6,color:"#1a3a1a",marginBottom:14}}, card&&card.back),
+          h("div", {style:{fontSize:"0.72rem",fontStyle:"italic",padding:"6px 14px",borderRadius:16,background:"rgba(139,105,20,0.1)",color:"#78622a"}}, card&&card.source)
+        )
+      )
+    ),
+    h("div", {style:{textAlign:"center",marginTop:8}},
+      h("button", {style:{display:"inline-flex",alignItems:"center",gap:6,padding:"8px 18px",borderRadius:20,border:"1px solid #d4b87a",background:"white",cursor:"pointer",fontSize:"0.8rem",color:"#6b4c2e",fontFamily:"inherit"}, onClick:shuffle}, "\uD83D\uDD00 Shuffle Deck")
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// SKILL BUILDER PAGE
+// ═══════════════════════════════════════════════
+function SkillBuilderPage() {
+  const [revealed, setRevealed] = useState({});
+  const [inputs, setInputs] = useState({});
+  const h = React.createElement;
+
+  return h("div", null,
+    h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Skill Builder: Open-Ended Questions"),
+    h("p", {style:{fontSize:"0.87rem",color:"#8a7a65",marginBottom:8}}, "Practice converting closed questions into open-ended ones. Type your version, then reveal a suggested answer."),
+    h(Citation, {text:"Exercises adapted from the \"Open-Ended Question Activity\" training document (Farm Stress Training materials). The emphasis on avoiding \"Why\" questions and using \"What\" and \"How\" instead comes from this source."}),
+    h("div", {style:{display:"flex",flexDirection:"column",gap:14,marginTop:16}},
+      skillExercises.map((ex,i) => h("div", {key:i, className:"card", style:{padding:20}},
+        h("div", {style:{fontSize:"0.87rem",color:"#5a4a35",marginBottom:8}}, "Convert this closed question into an open-ended one:"),
+        h("div", {style:{borderRadius:8,padding:"10px 16px",fontSize:"0.87rem",fontWeight:600,marginBottom:12,background:"#fef0ee",color:"#c45a3c",border:"1px solid #e8c0b8"}}, "\u201C"+ex.closed+"\u201D"),
+        h("input", {type:"text", className:"sb-input", placeholder:"Type your open-ended version here...", value:inputs[i]||"", onChange:e=>setInputs(prev=>({...prev,[i]:e.target.value}))}),
+        h("button", {className:"btn-outline", style:{marginTop:10}, onClick:()=>setRevealed(prev=>({...prev,[i]:true}))}, "Reveal Suggested Answer"),
+        revealed[i] && h("div", {className:"anim", style:{marginTop:12,padding:"12px 16px",borderRadius:8,fontSize:"0.85rem",lineHeight:1.6,background:"#e0f2e0",border:"1px solid #8ed08e",color:"#1a3a1a"}}, h("strong",null,"Suggested: "), "\u201C"+ex.open+"\u201D")
+      ))
+    ),
+    h(Citation, {text:"All question pairs source: \"Open-Ended Question Activity\" (Farm Stress Training materials, FSU). Key teaching point: Avoid \"WHY\" questions as they put people on the defensive; use \"WHAT\" and \"HOW\" instead."})
+  );
+}
+
+// ═══════════════════════════════════════════════
+// ASSESSMENT PAGE
+// ═══════════════════════════════════════════════
+function AssessmentPage() {
+  const [checked, setChecked] = useState({});
+  const [showResult, setShowResult] = useState(false);
+  const h = React.createElement;
+
+  const total = assessCategories.reduce((s,c)=>s+c.items.length,0);
+  const checkedCount = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((checkedCount/total)*100);
+  let level, ringColor, msg;
+  if(pct>=75){level="Strong awareness";ringColor="#b8e4b8";msg="You identified "+checkedCount+" out of "+total+" stress indicators. Strong awareness \u2014 keep building through modules and practice.";}
+  else if(pct>=40){level="Growing awareness";ringColor="#fde68a";msg="You identified "+checkedCount+" out of "+total+". Building awareness \u2014 review Modules 1 and 5 especially.";}
+  else{level="Room to grow";ringColor="#fecaca";msg="You identified "+checkedCount+" out of "+total+". Great starting point \u2014 the learning modules will build a much stronger foundation.";}
+
+  return h("div", null,
+    h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Stress Awareness Self-Check"),
+    h("div", {style:{borderRadius:10,padding:20,marginBottom:20,background:"#f5edd6",border:"1px solid #e8d5a8"}},
+      h("h3", {style:{fontWeight:600,marginBottom:4,color:"#6b4c2e",fontSize:"0.95rem"}}, "How well can you spot the signs?"),
+      h("p", {style:{fontSize:"0.85rem",color:"#5a4a35"}}, "This is a learning tool, not a clinical assessment. Check off the signs you'd feel confident recognizing in someone you work with.")
+    ),
+    assessCategories.map((cat,ci) => h("div", {key:ci, className:"card", style:{padding:20,marginBottom:14}},
+      h("h3", {style:{fontWeight:600,fontSize:"0.9rem",color:"#6b4c2e",marginBottom:2}}, cat.name),
+      h("div", {style:{fontSize:"0.72rem",fontStyle:"italic",color:"#8a7a65",marginBottom:10}}, "Source: "+cat.source),
+      h("div", {style:{display:"flex",flexWrap:"wrap",gap:8}},
+        cat.items.map((item,ii) => {
+          const key=ci+"-"+ii;
+          const isOn=checked[key];
+          return h("button", {key:key, className:"chip"+(isOn?" on":""), onClick:()=>{setChecked(prev=>({...prev,[key]:!prev[key]}));setShowResult(false);}}, item);
+        })
+      )
+    )),
+    h("div", {style:{textAlign:"center"}},
+      h("button", {className:"btn-green", style:{padding:"12px 24px",borderRadius:10}, onClick:()=>setShowResult(true)}, "See My Awareness Score")
+    ),
+    showResult && h("div", {className:"card anim", style:{borderWidth:2,borderColor:"#6ab86a",padding:24,textAlign:"center",marginTop:20}},
+      h("div", {style:{width:96,height:96,borderRadius:"50%",margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.5rem",fontWeight:700,background:ringColor,color:"#2d1f0e"}}, pct+"%"),
+      h("h3", {style:{fontWeight:700,fontSize:"1.1rem",color:"#2d1f0e"}}, level),
+      h("p", {style:{marginTop:8,fontSize:"0.87rem",color:"#5a4a35"}}, msg)
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// RESOURCES PAGE
+// ═══════════════════════════════════════════════
+function ResourcesPage() {
+  const h = React.createElement;
+  const resources = [
+    {icon:"\uD83D\uDEA8",bg:"#fecaca",title:"988 Suicide & Crisis Lifeline",desc:"Free, confidential, 24/7 support for people in distress",phone:"Call or text: 988"},
+    {icon:"\uD83D\uDEB6",bg:"#fecaca",title:"Crisis Text Line",desc:"Free crisis counseling via text message",phone:"Text HOME to 741741"},
+    {icon:"\uD83C\uDF3F",bg:"#b8e4b8",title:"Farm Aid Farmer Hotline",desc:"Connects farmers with resources for farm-related challenges",phone:"1-800-FARM-AID (1-800-327-6243)"},
+    {icon:"\uD83E\uDDE0",bg:"#b8e4b8",title:"SAMHSA National Helpline",desc:"Substance Abuse and Mental Health Services Administration",phone:"1-800-662-4357"},
+    {icon:"\uD83C\uDF31",bg:"#e0eef8",title:"Cooperative Extension Services",desc:"Your local Extension office offers farm financial management, stress management programs, and can connect you with agribusiness resources."},
+    {icon:"\uD83D\uDCDA",bg:"#f5edd6",title:"Recommended Reading",desc:"Stress Free for Good (Luskin & Pelletier) \u2022 Full Catastrophe Living (Kabat-Zinn) \u2022 Mindfulness: Finding Peace in a Frantic World (Williams & Penman)",source:"Referenced in MSU Extension \"Productive Mindset\" handout"}
+  ];
+
+  return h("div", null,
+    h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Crisis & Support Resources"),
+    h("p", {style:{fontSize:"0.87rem",color:"#8a7a65",marginBottom:12}}, "Keep these on hand. You never know when you or someone you know will need them."),
+    h(Citation, {text:"Resources compiled from NDSU Extension FS-1805 \"Responding to Distressed People,\" MSU Extension \"How to Talk with Farmers Under Stress\" handout, and AFBF Training Facilitator Guide materials."}),
+    h("div", {style:{display:"flex",flexDirection:"column",gap:10,marginTop:16}},
+      resources.map((r,i) => h("div", {key:i, className:"res-card"},
+        h("div", {className:"res-icon", style:{background:r.bg}}, r.icon),
+        h("div", null,
+          h("h3", {style:{fontWeight:600,fontSize:"0.9rem",color:"#2d1f0e"}}, r.title),
+          h("p", {style:{fontSize:"0.8rem",color:"#8a7a65",marginTop:2}}, r.desc),
+          r.phone && h("div", {style:{fontSize:"1rem",fontWeight:700,color:"#c45a3c",marginTop:4}}, r.phone),
+          r.source && h("div", {style:{fontSize:"0.72rem",fontStyle:"italic",color:"#8a7a65",marginTop:4}}, r.source)
+        )
+      ))
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// WELCOME PAGE
+// ═══════════════════════════════════════════════
+function WelcomePage({onNavigate}) {
+  const h = React.createElement;
+  const features = [
+    {icon:"\uD83D\uDCD6",title:"Learning Modules",desc:"Six modules on active listening, empathy, and crisis response",page:"learn"},
+    {icon:"\uD83C\uDFAE",title:"Scenario Practice",desc:"Real-world farm scenarios with guided decision-making",page:"scenarios"},
+    {icon:"\uD83D\uDCC4",title:"Flash Cards",desc:"Quick-review cards on key active listening skills",page:"flashcards"},
+    {icon:"\uD83D\uDD27",title:"Skill Builder",desc:"Practice converting closed questions to open ones",page:"skillbuilder"},
+    {icon:"\uD83D\uDCCA",title:"Self-Check",desc:"Assess your awareness of stress warning signs",page:"assessment"},
+    {icon:"\uD83D\uDCDE",title:"Resources",desc:"Crisis hotlines and support for farm communities",page:"resources"}
+  ];
+
+  return h("div", null,
+    h("div", {className:"hero"},
+      h("div", {style:{fontSize:"3rem",marginBottom:14}}, "\uD83E\uDD1D"),
+      h("h2", {style:{fontSize:"1.8rem",fontWeight:700,color:"#2d1f0e",marginBottom:10}}, "Listening Is a Skill Worth Practicing"),
+      h("p", {style:{fontSize:"1rem",color:"#5a4a35",maxWidth:600,margin:"0 auto 22px"}}, "When farmers and ranchers face stress, the people around them \u2014 lenders, Extension educators, FSA staff, neighbors \u2014 can make a real difference simply by listening well. This app will help you build and practice those skills."),
+      h("button", {className:"btn-green", style:{padding:"14px 28px",borderRadius:10,fontSize:"1rem"}, onClick:()=>onNavigate("learn")}, "Start Learning \u2192")
+    ),
+    h("div", {style:{borderRadius:10,padding:16,marginBottom:22,fontSize:"0.75rem",lineHeight:1.65,fontStyle:"italic",background:"#faf7ef",border:"1px solid #e8d5a8",color:"#78622a"}},
+      h("strong", {style:{fontStyle:"normal"}}, "About this app: "),
+      "Content is drawn from training materials developed by Michigan State University Extension, North Dakota State University Extension Service, the American Farm Bureau Federation (AFBF) Training Program (Dr. Andrea Bjornestad, South Dakota State University; Dr. Courtney Cuthbertson, University of Illinois; Mr. Eric Karbowski, Michigan State University; Ms. Pamela Schallhorn, University of Illinois; Dr. John Shutske, University of Wisconsin; and RJ Karney, AFBF), USDA Farm Service Agency training scenarios, the \"Basic Counseling Skills\" training presentation, Holly Tiret's work on active listening and empathy (MSU Extension), and Simply Psychology research by Olivia Guy-Evans, MSc. Individual sources are cited throughout each section."
+    ),
+    h("div", {className:"feat-grid"},
+      features.map(f => h("div", {key:f.page, className:"feat-card", onClick:()=>onNavigate(f.page)},
+        h("div", {style:{fontSize:"2rem",marginBottom:8}}, f.icon),
+        h("h3", {style:{fontWeight:600,fontSize:"0.9rem",color:"#2d1f0e",marginBottom:4}}, f.title),
+        h("p", {style:{fontSize:"0.78rem",color:"#8a7a65"}}, f.desc)
+      ))
+    )
+  );
+}
+
+// ═══════════════════════════════════════════════
+// MAIN APP
+// ═══════════════════════════════════════════════
+function App() {
+  const [page, setPage] = useState("welcome");
+  const [completedModules, setCompletedModules] = useState(new Set());
+  const h = React.createElement;
+
+  const completeModule = useCallback(id => {
+    setCompletedModules(prev => new Set([...prev, id]));
+  }, []);
+
+  const pages = [
+    {key:"welcome",label:"Home"},{key:"learn",label:"Learn"},{key:"scenarios",label:"Scenarios"},
+    {key:"flashcards",label:"Flash Cards"},{key:"skillbuilder",label:"Skill Builder"},
+    {key:"assessment",label:"Self-Check"},{key:"resources",label:"Resources"}
+  ];
+
+  const navigate = p => { setPage(p); window.scrollTo({top:0,behavior:"smooth"}); };
+
+  return h("div", {style:{minHeight:"100vh",background:"#faf7ef"}},
+    // Header
+    h("header", {className:"hdr"},
+      h("div", {className:"hdr-top"},
+        h("div", {className:"hdr-brand"},
+          h("div", {className:"hdr-icon"}, "\uD83C\uDF31"),
+          h("div", null,
+            h("div", {className:"hdr-title"}, "Active Listening Skills"),
+            h("div", {className:"hdr-sub"}, "For Agricultural Communities")
+          )
+        ),
+        h("div", {className:"hdr-badge"},
+          h("span", {className:"hdr-dot"}),
+          completedModules.size+" / 6 modules"
+        )
+      ),
+      h("nav", {className:"nav"},
+        pages.map(p => h("button", {key:p.key, className:"nav-btn"+(page===p.key?" act":""), onClick:()=>navigate(p.key)}, p.label))
+      )
+    ),
+    // Main content
+    h("main", {className:"main"},
+      page==="welcome" && h(WelcomePage, {onNavigate:navigate}),
+      page==="learn" && h("div", null,
+        h("h2", {style:{fontSize:"1.5rem",fontWeight:700,marginBottom:4,color:"#2d1f0e"}}, "Learning Modules"),
+        h("p", {style:{fontSize:"0.87rem",color:"#8a7a65",marginBottom:18}}, "Work through each module to build your active listening foundation. Click a module to expand it."),
+        modules.map(mod => h(ModuleCard, {key:mod.id, mod:mod, isCompleted:completedModules.has(mod.id), onComplete:completeModule}))
+      ),
+      page==="scenarios" && h(ScenarioPage),
+      page==="flashcards" && h(FlashCardsPage),
+      page==="skillbuilder" && h(SkillBuilderPage),
+      page==="assessment" && h(AssessmentPage),
+      page==="resources" && h(ResourcesPage)
+    ),
+    // Footer
+    h("footer", {className:"footer"},
+      h("p", {style:{marginBottom:8}}, h("strong", {style:{color:"#6b4c2e"}}, "Content Sources & Acknowledgments")),
+      h("p", {style:{maxWidth:800,margin:"0 auto"}}, "Michigan State University Extension (Holly Tiret; Jeffrey W. Dwyer, Director; Quentin Tyler, Director) \u00B7 North Dakota State University Extension Service (FS-1805, adapted from NDSU Counseling Center & Behavioral Health Intervention Team) \u00B7 American Farm Bureau Federation Training Program (Dr. Andrea Bjornestad, SDSU; Dr. Courtney Cuthbertson, U of IL; Mr. Eric Karbowski, MSU; Ms. Pamela Schallhorn, U of IL; Dr. John Shutske, UW; RJ Karney, AFBF) \u00B7 USDA Farm Service Agency Scenario Training Materials \u00B7 Basic Counseling Skills Training Presentation \u00B7 Simply Psychology (Olivia Guy-Evans, MSc; reviewed by Saul Mcleod, PhD) \u00B7 MSU Extension RELAX: Alternatives to Anger Program")
+    )
+  );
+}
+
+ReactDOM.render(React.createElement(App), document.getElementById("root"));
+</script>
+</body>
+</html>
